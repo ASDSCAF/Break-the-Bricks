@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+</head>
+<body>
+<div style="width: 100px;height: 30px;background-color: red;margin-left: 100px" id="id"></div>
+<br/>
+<input type="button" value="按一下" id="bu"/>
+<input type="button" value="停止" id="tz"/>
+<input type="button" value="返回" id="fh"/>
+<script>
+
+     var timer = null;
+
+      document.querySelector("#bu").onclick=function(){
+          if(timer==null){
+              timer =  window.setInterval(ok,100);
+          }
+     };
+
+     function ok(){
+            var marginLeft = parseInt(document.querySelector("#id").style.marginLeft) + 1;
+            document.querySelector("#id").style.marginLeft = marginLeft+"px";
+    };
+
+    document.querySelector("#tz").onclick=function(){
+        window.clearInterval(timer);
+        timer=null;
+    }
+
+
+     var wz= document.querySelector("id").style.marginLeft;
+    document.querySelector("#fh").onclick=function(){
+        var ma=100;
+        document.querySelector("#id").style.marginLeft ="px";
+    }
+
+</script>
+</body>
+
+</html>

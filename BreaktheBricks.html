@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+        <div id="div" style="width: 100px;height: 30px;background-color: red;margin-left: 0px "></div>
+
+        <script>
+
+            window.addEventListener("keydown",move) ;
+            var element= document.querySelector("#div");
+
+            function move(event){
+                console.log(event.key);
+                if(event.key== "d"){
+                    var marginLeft=parseInt(element.style.marginLeft)+100;
+                    element.style.marginLeft=marginLeft+"px";
+                }else if(event.key=="a"){
+                    var marginLeft2=parseInt(element.style.marginLeft)-100;
+                    element.style.marginLeft=marginLeft2+"px";
+                }
+            }
+
+
+
+//            document.querySelector("#div").onkeydown=onkeydown;
+//            document.querySelector("#div").style.wi
+//        document.querySelector("#div").onkeydown=function(){
+//            document.querySelector("#div").style
+//            keyDown();
+//        }
+        </script>
+</body>
+</html>
