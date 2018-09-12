@@ -3,34 +3,67 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <style type="text/css">
+        canvas{
+            border: 1px red solid;
+        }
+    </style>
 </head>
 <body>
-        <div id="div" style="width: 100px;height: 30px;background-color: red;margin-left: 0px "></div>
 
-        <script>
+        <canvas id="div"  width="600" height="600"></canvas>
 
-            window.addEventListener("keydown",move) ;
-            var element= document.querySelector("#div");
+  <script>
 
-            function move(event){
-                console.log(event.key);
-                if(event.key== "d"){
-                    var marginLeft=parseInt(element.style.marginLeft)+100;
-                    element.style.marginLeft=marginLeft+"px";
-                }else if(event.key=="a"){
-                    var marginLeft2=parseInt(element.style.marginLeft)-100;
-                    element.style.marginLeft=marginLeft2+"px";
-                }
+            var log =console.log.bind(console)//输出指定信息----用来排除BUG或者查看信息
+
+            var element= document.querySelector("#div")//拍板的id
+            var context=element.getContext("2d")
+            var img = new Image()
+            img.src = "26124582.jpg"
+
+            var x=225;
+            var y=500;
+            var sppd=5;//移动速度
+
+            img.onload=function(){
+                context.drawImage(img, x, y)
             }
 
+            var leftDown=false;
+            var rightDown=false;
 
+            window.addEventListener("keydown",move) ;
+            function move(event){
+                log("keydown")
+                var k=event.key
+                if(k == "d"){
+                   rightDown=true;
+                }else if ( k == "a"){
+                    leftDown=true;
+                }
+            }
+            window.addEventListener("keyup",stop) ;
+            function stop(event){
+                log("keyup")
+                var k=event.key
+                if(k == "d"){
+                    rightDown=false;
+                }else if ( k == "a"){
+                    leftDown=false;
+                }
+            }
+      setInterval(function(){
 
-//            document.querySelector("#div").onkeydown=onkeydown;
-//            document.querySelector("#div").style.wi
-//        document.querySelector("#div").onkeydown=function(){
-//            document.querySelector("#div").style
-//            keyDown();
-//        }
+          //
+            if(leftDown){
+                x-=sppd;
+            }else if(rightDown){
+                x+=sppd;
+            }
+          context.clearRect(0,0,element.width,element.height)
+          context.drawImage(img, x, y)
+      },1000/60)
         </script>
 </body>
 </html>
