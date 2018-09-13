@@ -17,53 +17,71 @@
 
             var log =console.log.bind(console)//输出指定信息----用来排除BUG或者查看信息
 
-            var element= document.querySelector("#div")//拍板的id
-            var context=element.getContext("2d")
-            var img = new Image()
-            img.src = "26124582.jpg"
-
-            var x=225;
-            var y=500;
-            var sppd=5;//移动速度
-
-            img.onload=function(){
-                context.drawImage(img, x, y)
+            var imageFromPath=function(path){
+                var img = new Image()
+                img.src =path
+                return img
             }
+    var paddle=function(){
+        var image=imageFromPath("26124582.jpg")
+        var o={
+            image:image,
+            x:100,
+            y:200,
+            speed:5,
+        }
+    }
 
-            var leftDown=false;
-            var rightDown=false;
+      var _main =function(){
 
-            window.addEventListener("keydown",move) ;
-            function move(event){
-                log("keydown")
-                var k=event.key
-                if(k == "d"){
-                   rightDown=true;
-                }else if ( k == "a"){
-                    leftDown=true;
-                }
-            }
-            window.addEventListener("keyup",stop) ;
-            function stop(event){
-                log("keyup")
-                var k=event.key
-                if(k == "d"){
-                    rightDown=false;
-                }else if ( k == "a"){
-                    leftDown=false;
-                }
-            }
-      setInterval(function(){
+          var element= document.querySelector("#div")//拍板的id
+          var context=element.getContext("2d")
 
-          //
-            if(leftDown){
-                x-=sppd;
-            }else if(rightDown){
-                x+=sppd;
-            }
-          context.clearRect(0,0,element.width,element.height)
-          context.drawImage(img, x, y)
-      },1000/60)
+
+//          var x=225;
+//          var y=500;
+//          var sppd=5;//移动速度
+//          img.onload=function(){
+//              context.drawImage(img, x, y)
+//          }
+        var paddle=paddle()
+          var leftDown=false;
+          var rightDown=false;
+
+          window.addEventListener("keydown",move) ;
+          function move(event){
+              log("keydown")
+              var k=event.key
+              if(k == "d"){
+                  rightDown=true;
+              }else if ( k == "a"){
+                  leftDown=true;
+              }
+          }
+          window.addEventListener("keyup",stop) ;
+          function stop(event){
+              log("keyup")
+              var k=event.key
+              if(k == "d"){
+                  rightDown=false;
+              }else if ( k == "a"){
+                  leftDown=false;
+              }
+          }
+          setInterval(function(){
+
+              //
+              if(leftDown){
+                  x-=sppd;
+              }else if(rightDown){
+                  x+=sppd;
+              }
+              context.clearRect(0,0,element.width,element.height)
+              context.drawImage(img, x, y)
+          },1000/60)
+      }
+
+            _main();
         </script>
 </body>
 </html>
