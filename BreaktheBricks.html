@@ -4,84 +4,119 @@
     <meta charset="UTF-8">
     <title></title>
     <style type="text/css">
-        canvas{
+        canvas {
             border: 1px red solid;
         }
     </style>
 </head>
 <body>
 
-        <canvas id="div"  width="600" height="600"></canvas>
+<canvas id="div" width="600" height="600"></canvas>
 
-  <script>
+<script>
+    //////
+    var log = console.log.bind(console)//输出指定信息----用来排除BUG或者查看信息
 
-            var log =console.log.bind(console)//输出指定信息----用来排除BUG或者查看信息
+    var imageFromPath = function (path) {
+        var img = new Image()
+        img.src = path
+        return img
+    }
 
-            var imageFromPath=function(path){
-                var img = new Image()
-                img.src =path
-                return img
+    var Paddle = function () {//拍板
+        var image = imageFromPath("26124582.jpg")
+        var o = {
+            image: image,
+            x: 200,
+            y: 500,
+            speed: 5,
+        }
+        o.moveLeft = function () {
+            o.x -= o.speed;
+        }
+        o.moveRight = function () {
+            o.x += o.speed;
+        }
+        return o;
+    }
+    //        var paddle=Paddle()//拍板实列化
+
+    var GuaGame = function () {
+        var g = {
+            actions:{},
+    keydowns:{},
+        }
+
+        var canvas = document.querySelector("#div")//拍板的id
+        var context = canvas.getContext("2d")
+        g.canvas = canvas
+        g.context = context
+//
+  window.addEventListener("keydown",function(){
+      g.keydowns[event.key]=true
+  })
+        window.addEventListener("keyup",function(){
+            g.keydowns[event.key]=false
+        })
+        //
+        g.registerAction=function(key,callback){
+            g.actions[key]=callback
+        }
+        //
+        setInterval(function () {
+            //events
+           // 负责监听和回调函数
+            var actions=Object.keys(g.actions)
+            for(var i=0;i<actions.length;i++){
+                var key=actions[i]
+                if(g.keydowns[key]){
+                    //如果按键按下，调用注册的action
+                    g.actions[key]()
+                }
             }
-    var paddle=function(){
-        var image=imageFromPath("26124582.jpg")
-        var o={
-            image:image,
-            x:100,
-            y:200,
-            speed:5,
+            //update
+            //g.update()
+
+            context.clearRect(0, 0, canvas.width, canvas.height)
+
+            //drow
+            g.draw()
+        }, 1000 / 60)
+        return g
+    }
+
+    var _main = function () {
+
+        var paddle = Paddle()
+
+        var game = GuaGame()
+
+
+        var leftDown = false
+        var rightDown = false
+
+        game.registerAction("a",function(){
+            paddle.moveLeft()
+        })
+        game.registerAction("d",function(){
+            paddle.moveRight()
+        })
+
+//        game.update = function () {
+//            if (leftDown) {
+//                paddle.moveLeft();
+//
+//            } else if (rightDown) {
+//                paddle.moveRight();
+//
+//            }
+//        }
+        game.draw = function () {
+            game.context.drawImage(paddle.image, paddle.x, paddle.y)
         }
     }
 
-      var _main =function(){
-
-          var element= document.querySelector("#div")//拍板的id
-          var context=element.getContext("2d")
-
-
-//          var x=225;
-//          var y=500;
-//          var sppd=5;//移动速度
-//          img.onload=function(){
-//              context.drawImage(img, x, y)
-//          }
-        var paddle=paddle()
-          var leftDown=false;
-          var rightDown=false;
-
-          window.addEventListener("keydown",move) ;
-          function move(event){
-              log("keydown")
-              var k=event.key
-              if(k == "d"){
-                  rightDown=true;
-              }else if ( k == "a"){
-                  leftDown=true;
-              }
-          }
-          window.addEventListener("keyup",stop) ;
-          function stop(event){
-              log("keyup")
-              var k=event.key
-              if(k == "d"){
-                  rightDown=false;
-              }else if ( k == "a"){
-                  leftDown=false;
-              }
-          }
-          setInterval(function(){
-
-              //
-              if(leftDown){
-                  x-=sppd;
-              }else if(rightDown){
-                  x+=sppd;
-              }
-              context.clearRect(0,0,element.width,element.height)
-              context.drawImage(img, x, y)
-          },1000/60)
-      }
-
-            _main();
-        </script>
+    _main();
+</script>
 </body>
 </html>
