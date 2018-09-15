@@ -39,47 +39,79 @@
         }
         return o;
     }
+
+    var Ball = function () {//球
+        var image = imageFromPath("ball.png")
+        var o = {
+            image: image,
+            x: 200,
+            y: 450,
+            speedX: 10,
+            speedY: 10,
+            fired: false,
+        }
+        o.fire = function () {
+            o.fired = true
+        }
+
+        o.move = function () {
+            if (o.fired) {
+
+                if (o.x < 0 || o.x > 600) {
+                    o.speedX = -o.speedX
+                }
+                if (o.y < 0 || o.y > 600) {
+                    o.speedY = -o.speedY
+                }
+                //move
+                o.x += o.speedX
+                o.y += o.speedY
+            }
+        }
+        return o;
+    }
     //        var paddle=Paddle()//拍板实列化
 
     var GuaGame = function () {
         var g = {
-            actions:{},
-    keydowns:{},
+            actions: {},
+            keydowns: {},
+            drawImage: {},
+
         }
 
         var canvas = document.querySelector("#div")//拍板的id
         var context = canvas.getContext("2d")
         g.canvas = canvas
         g.context = context
-//
-  window.addEventListener("keydown",function(){
-      g.keydowns[event.key]=true
-  })
-        window.addEventListener("keyup",function(){
-            g.keydowns[event.key]=false
+
+        g.drawImage = function (guaimage) {
+            g.context.drawImage(guaimage.image, guaimage.x, guaimage.y)
+        }
+        window.addEventListener("keydown", function () {
+            g.keydowns[event.key] = true
+        })
+        window.addEventListener("keyup", function () {
+            g.keydowns[event.key] = false
         })
         //
-        g.registerAction=function(key,callback){
-            g.actions[key]=callback
+        g.registerAction = function (key, callback) {
+            g.actions[key] = callback
         }
-        //
+        //游戏内部的主要循环
         setInterval(function () {
             //events
-           // 负责监听和回调函数
-            var actions=Object.keys(g.actions)
-            for(var i=0;i<actions.length;i++){
-                var key=actions[i]
-                if(g.keydowns[key]){
+            // 负责监听和回调函数
+            var actions = Object.keys(g.actions)
+            for (var i = 0; i < actions.length; i++) {
+                var key = actions[i]
+                if (g.keydowns[key]) {
                     //如果按键按下，调用注册的action
                     g.actions[key]()
                 }
             }
-            //update
-            //g.update()
-
+            g.update()
             context.clearRect(0, 0, canvas.width, canvas.height)
-
-            //drow
             g.draw()
         }, 1000 / 60)
         return g
@@ -87,7 +119,8 @@
 
     var _main = function () {
 
-        var paddle = Paddle()
+        var paddle = Paddle()//拍板
+        var ball = Ball()//球
 
         var game = GuaGame()
 
@@ -95,24 +128,25 @@
         var leftDown = false
         var rightDown = false
 
-        game.registerAction("a",function(){
+        game.registerAction("a", function () {
             paddle.moveLeft()
         })
-        game.registerAction("d",function(){
+        game.registerAction("d", function () {
             paddle.moveRight()
         })
 
-//        game.update = function () {
-//            if (leftDown) {
-//                paddle.moveLeft();
-//
-//            } else if (rightDown) {
-//                paddle.moveRight();
-//
-//            }
-//        }
+        game.registerAction("f", function () {
+            log("f")
+            ball.fire()
+        })
+        game.update = function () {
+            log("aaa")
+            ball.move()
+        }
         game.draw = function () {
-            game.context.drawImage(paddle.image, paddle.x, paddle.y)
+
+            game.drawImage(paddle)
+            game.drawImage(ball)
         }
     }
 
